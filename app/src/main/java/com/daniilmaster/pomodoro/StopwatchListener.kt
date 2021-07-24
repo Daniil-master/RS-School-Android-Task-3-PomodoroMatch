@@ -8,4 +8,6 @@ interface StopwatchListener {
     fun reset(id: Int, currentMs: Long) // очистка таймера
 
     fun delete(id: Int) // удаление таймера
+
+    fun setIsStarted(boolean: Boolean) // установка статуса запущенного
 }

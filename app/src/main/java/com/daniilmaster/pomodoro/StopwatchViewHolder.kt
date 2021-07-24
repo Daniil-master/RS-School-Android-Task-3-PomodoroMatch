@@ -24,8 +24,6 @@ class StopwatchViewHolder(
 
         startTime = System.currentTimeMillis()
 
-
-
         if (stopwatchItem.isStarted) { // если состояние запущен
             startTimer(stopwatchItem) // запускаем таймер
         } else {
@@ -41,7 +39,7 @@ class StopwatchViewHolder(
             if (stopwatchItem.isStarted)  // пауза при запущенном иначе запуск
                 listener.stop(stopwatchItem.id, stopwatchItem.currentMs)
             else {
-                if (stopwatchItem.currentMs > 0L) // проверка при только больше 0 мс будет идти запуск
+                if (stopwatchItem.currentMs > 10L) // проверка при только больше 10 мс будет идти запуск (т.к. небольшая разница отчете)
                     listener.start(stopwatchItem.id)
             }
 
@@ -101,6 +99,7 @@ class StopwatchViewHolder(
             }
 
             override fun onFinish() { // при окончании
+                listener.setIsStarted(false)
                 stopTimer() // остановка таймера (обновление ui)
                 binding.stopwatchTimer.text =
                     stopwatchItem.currentMs.displayTime()  //  отображаем оставшееся время

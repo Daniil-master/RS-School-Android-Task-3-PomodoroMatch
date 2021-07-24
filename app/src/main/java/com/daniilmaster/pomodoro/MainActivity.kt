@@ -113,6 +113,10 @@ class MainActivity : AppCompatActivity(), StopwatchListener {
         stopwatchAdapter.submitList(stopwatchesList.toList()) // отправляем в адаптер новый список
     }
 
+    override fun setIsStarted(boolean: Boolean) {
+        isStarted = boolean
+    }
+
     // Принятие
     private fun changeStopwatch(
         id: Int,
@@ -133,10 +137,10 @@ class MainActivity : AppCompatActivity(), StopwatchListener {
                         isStarted
                     )
                 )
-                Log.d(
-                    TAG,
-                    "ID: ${it.id}, CurrentMS: ${it.currentMs}, PeriodMS: ${it.periodMs}, IsStarted: ${it.isStarted} "
-                )
+//                Log.d(
+//                    TAG,
+//                    "ID: ${it.id}, CurrentMS: ${it.currentMs}, PeriodMS: ${it.periodMs}, IsStarted: ${it.isStarted} "
+//                )
             } else {
                 newTimers.add(it) // иначе при не равных id добавляем все остальные
             }
