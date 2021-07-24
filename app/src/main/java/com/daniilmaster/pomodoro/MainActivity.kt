@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.OnLifecycleEvent
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.daniilmaster.pomodoro.databinding.ActivityMainBinding
 import com.daniilmaster.pomodoro.foreground.*
-import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity(), StopwatchListener {
     /*
@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity(), StopwatchListener {
     private val stopwatchesList = mutableListOf<StopwatchItem>() // список StopwatchItem
     private var nextId = 0 // счетчик id
     private var startTime = 0L
+    private var isStarted = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,11 +67,15 @@ class MainActivity : AppCompatActivity(), StopwatchListener {
 
     // Запуск таймера
     override fun start(id: Int) {
-        changeStopwatch(
-            id,
-            null,
+        if (!isStarted) {
+            changeStopwatch(
+                id,
+                null,
+                true
+            ) // передаем таймера id, никакого времени мс и статус запуск
             isStarted = true
-        ) // передаем таймера id, никакого времени мс и статус запуск
+        } else
+            Toast.makeText(this, "Уже запущен таймер", Toast.LENGTH_SHORT).show()
 
 //        lifecycleScope.launch(Dispatchers.Main) {
 //            while (true) {
@@ -82,11 +87,16 @@ class MainActivity : AppCompatActivity(), StopwatchListener {
 
     // Остановка таймера
     override fun stop(id: Int, currentMs: Long) {
-        changeStopwatch(
-            id,
-            currentMs,
-            false
-        ) // передаем таймера id, текущее время мс и статус остановки
+        if (isStarted) {
+            changeStopwatch(
+                id,
+                currentMs,
+                false
+            ) // передаем таймера id, текущее время мс и статус остановки
+            isStarted = false
+        }
+
+
     }
 
     // Очистка таймера
