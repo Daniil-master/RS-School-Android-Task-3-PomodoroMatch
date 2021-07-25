@@ -23,6 +23,7 @@ class StopwatchViewHolder(
             stopwatchItem.currentMs.displayTime() // постоянно отображаем текущее время
 
         startTime = System.currentTimeMillis()
+        binding.circularProgressbar.setCurrent(stopwatchItem.periodMs - stopwatchItem.currentMs)
 
         if (stopwatchItem.isStarted) { // если состояние запущен
             startTimer(stopwatchItem) // запускаем таймер
