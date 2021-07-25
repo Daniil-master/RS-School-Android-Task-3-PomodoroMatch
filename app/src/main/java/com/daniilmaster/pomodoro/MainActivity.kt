@@ -2,7 +2,6 @@ package com.daniilmaster.pomodoro
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -26,7 +25,6 @@ class MainActivity : AppCompatActivity(), StopwatchListener {
     private val stopwatchesList = mutableListOf<StopwatchItem>() // список StopwatchItem
     private var nextId = 0 // счетчик id
     private var startTime = 0L
-    private var isStarted = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,36 +65,21 @@ class MainActivity : AppCompatActivity(), StopwatchListener {
 
     // Запуск таймера
     override fun start(id: Int) {
-        if (!isStarted) {
-            changeStopwatch(
-                id,
-                null,
-                true
-            ) // передаем таймера id, никакого времени мс и статус запуск
-            isStarted = true
-        } else
-            Toast.makeText(this, "Уже запущен таймер", Toast.LENGTH_SHORT).show()
 
-//        lifecycleScope.launch(Dispatchers.Main) {
-//            while (true) {
-//                binding.timerView.text = (System.currentTimeMillis() - startTime).displayTime()
-//                delay(StopwatchViewHolder.UNIT_TEN_MS)
-//            }
-//        }
+        changeStopwatch(
+            id,
+            null,
+            true
+        ) // передаем таймера id, никакого времени мс и статус запуск
     }
 
     // Остановка таймера
     override fun stop(id: Int, currentMs: Long) {
-        if (isStarted) {
-            changeStopwatch(
-                id,
-                currentMs,
-                false
-            ) // передаем таймера id, текущее время мс и статус остановки
-            isStarted = false
-        }
-
-
+        changeStopwatch(
+            id,
+            currentMs,
+            false
+        ) // передаем таймера id, текущее время мс и статус остановки
     }
 
     // Очистка таймера
@@ -111,10 +94,6 @@ class MainActivity : AppCompatActivity(), StopwatchListener {
     override fun delete(id: Int) {
         stopwatchesList.remove(stopwatchesList.find { it.id == id }) // удаляем из текущего списка с заданным id
         stopwatchAdapter.submitList(stopwatchesList.toList()) // отправляем в адаптер новый список
-    }
-
-    override fun setIsStarted(boolean: Boolean) {
-        isStarted = boolean
     }
 
     // Принятие
@@ -142,7 +121,19 @@ class MainActivity : AppCompatActivity(), StopwatchListener {
 //                    "ID: ${it.id}, CurrentMS: ${it.currentMs}, PeriodMS: ${it.periodMs}, IsStarted: ${it.isStarted} "
 //                )
             } else {
-                newTimers.add(it) // иначе при не равных id добавляем все остальные
+                if (it.isStarted) {
+                    newTimers.add(
+                        StopwatchItem(
+                            it.id,
+                            currentMs ?: it.currentMs,
+                            it.periodMs,
+                            false
+                        )
+                    )
+
+                } else {
+                    newTimers.add(it) // иначе при не равных id добавляем все остальные
+                }
             }
         }
         stopwatchAdapter.submitList(newTimers) // отправляем в адаптер новый список Stopwatch

@@ -99,7 +99,6 @@ class StopwatchViewHolder(
             }
 
             override fun onFinish() { // при окончании
-                listener.setIsStarted(false)
                 stopTimer() // остановка таймера (обновление ui)
                 binding.stopwatchTimer.text =
                     stopwatchItem.currentMs.displayTime()  //  отображаем оставшееся время
@@ -135,10 +134,5 @@ class StopwatchViewHolder(
         private const val START_TIME = "00:00:00" // начало с 0
         private const val UNIT_TEN_MS = 10L // интервал 10 мс = 1 с
 
-
-//        private const val INTERVAL = 100L // интервал (на 100мс = 10с увеличивается)
-        //        private const val PERIOD = 1000L * 60L * 60L * 24L // Day - День
-//        private const val PERIOD = 1000L * 60L // период (60 000 мс)
-//        private const val REPEAT = 10 // повторять
     }
 }
